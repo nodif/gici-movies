@@ -8,23 +8,24 @@ import Movie from '../../movie.model';
 
 const HomePage: React.FC = props => {
 
-  const [searchField, setSearchField] = useState<string>('bad'); 
+
   const [movies, setMovies] = useState<Movie[]>([]); 
     
-  const { isLoading, isError, error, data, isFetching, refetch } = useQuery<any,Error>("repoData", () =>
-    fetch("https://imdb-api.com/en/API/SearchMovie/k_2yeouvno/" + searchField)
-    .then(res =>res.json()), {
+  const { isLoading, isError, error, data, isFetching, refetch } = useQuery<any,Error>("repoData", () => {
+    const input = document.getElementById('movie') as HTMLInputElement | null;
+    const value: string = input!.value;
+    return fetch("https://imdb-api.com/en/API/SearchMovie/k_2yeouvno/" + value)
+    .then(res =>res.json())}, {
+        refetchOnMount: true,
         enabled: false // disable this query from automatically running
       }
   );
 
   
-  useEffect(() => {
-    const input = document.getElementById('movie') as HTMLInputElement | null;
-    const value: string = input!.value;
-    setSearchField(value);
-   // setMovies(data.results);
-}, [searchField]);
+    useEffect(() => {
+            if(data)
+                setMovies(data.results); 
+        },  [movies]); 
 
   if (isLoading || isFetching) {
     return <div>Loading...</div>;
@@ -39,12 +40,10 @@ const HomePage: React.FC = props => {
     const input = document.getElementById('movie') as HTMLInputElement | null;
     const value: string = input!.value;
     console.log(value);
-    setSearchField(value);
-    refetch();
-  //  setMovies(data.results); 
+    refetch();   
+    setMovies(data.results); 
     console.log(data);
     console.log(movies);
-    console.log(searchField);
   };
 
   return(

@@ -9,7 +9,7 @@ interface MovieListProps {
 
 const MoviesOverview: React.FC<MovieListProps> = props => {
   
-    console.log(props.movies);
+    // console.log(props.movies);
   
 
     return (
@@ -17,7 +17,7 @@ const MoviesOverview: React.FC<MovieListProps> = props => {
                       {
                           props.movies.map((movie: Movie) => <MovieCard key={movie.id} item = {movie} />)
                       }
-                   </MovieList> : null 
+                   </MovieList> : <h2>Put the name</h2>
     );
 };
 
